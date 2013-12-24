@@ -3,8 +3,7 @@
 import os
 import zipfile
 
-def zip(dst):
-    files = os.listdir()
+def zip(files, dst):
     zf = zipfile.ZipFile("%s.zip" % (dst), "w")
     # print(abs_src) 
     # print("%s.zip" % (dst))
@@ -16,4 +15,5 @@ def zip(dst):
         zf.write(absname, arcname)
     zf.close()
 
-zip("dst")
+filess = os.listdir()
+zip(filess, "dst")
