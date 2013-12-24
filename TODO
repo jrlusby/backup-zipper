@@ -1,0 +1,2 @@
+Trimming program that removes older backups (keep two newest)
+Figure out best way to transfer the zipped files to backup filesystem
