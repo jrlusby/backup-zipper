@@ -1,23 +1,29 @@
 #! /usr/bin/env python3
 
+import sys
 import os
 import zipfile
 
 def main(argv):
-    filess = os.listdir()
-    zip(filess, "dst")
+    filelist = process_backups(argv[1])
+    zip(filelist, "dst")
 
 def zip(files, dst):
     zf = zipfile.ZipFile("%s.zip" % (dst), "w")
-    # print(abs_src) 
-    # print("%s.zip" % (dst))
-    for filename in files:
-        # print (os.path.abspath(filename))
-        absname = os.path.abspath(filename)
-        arcname = os.path.join(dst, filename)
+    for absname in files:
         # print(absname)
+        basename = os.path.basename(absname)
+        # print(basename)
+        arcname = os.path.join(dst, basename)
+        # print(arcname)
         zf.write(absname, arcname)
     zf.close()
+
+def process_backups(src):
+    filelist = os.listdir(src)
+    filelist[:] = [os.path.join(src, file) for file in filelist]
+    return filelist
+    
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv))
