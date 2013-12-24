@@ -5,11 +5,14 @@ import os
 import zipfile
 
 def main(argv):
+    destination = "dst.zip"
     filelist = process_backups(argv[1])
-    zip(filelist, "dst")
+    zip(filelist, destination)
+    # upload zip to remote
+    # upload_arc(destination, '192.168.26.80', 'support', 'asai1234')
 
 def zip(files, dst):
-    zf = zipfile.ZipFile("%s.zip" % (dst), "w")
+    zf = zipfile.ZipFile(dst, "w")
     for absname in files:
         # print(absname)
         basename = os.path.basename(absname)
@@ -24,6 +27,16 @@ def process_backups(src):
     filelist[:] = [os.path.join(src, file) for file in filelist]
     return filelist
     
+def upload_arc(archive, destination, username, password):
+    import ftplib
+    try:
+        session = ftplib.FTP(destination,username,password)
+        file = open(archive, 'rb')
+        session.storbinary('STOR '+archive, file)
+        file.close()
+        session.quit()
+    except:
+        print('whoa wtf happened?', sys.exc_info()[0])
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv))
