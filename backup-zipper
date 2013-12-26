@@ -9,15 +9,16 @@ def main(argv):
     zip(filelist, "dst")
 
 def zip(files, dst):
-    zf = zipfile.ZipFile("%s.zip" % (dst), "w")
+    #zf = zipfile.ZipFile("%s.zip" % (dst), "w")
     for absname in files:
         # print(absname)
         basename = os.path.basename(absname)
         # print(basename)
         arcname = os.path.join(dst, basename)
         # print(arcname)
-        zf.write(absname, arcname)
-    zf.close()
+        # zf.write(absname, arcname)
+        print('zf.write({},{})'.format(absname, arcname))
+    #zf.close()
 
 def process_backups(src):
     filelist = os.listdir(src)
