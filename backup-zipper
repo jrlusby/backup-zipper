@@ -3,6 +3,7 @@
 import sys
 import os
 import zipfile
+import re
 
 def main(argv):
     filelist = process_backups(argv[1])
@@ -27,7 +28,7 @@ def process_backups(src):
     backup_ids.sort()
     new_backupfiles = []
     for file in filelist:
-        if backup_ids[len(backup_ids)] in file:
+        if backup_ids[len(backup_ids)-1] in file:
             new_backupfiles.append(file)
     return new_backupfiles
 
@@ -35,8 +36,8 @@ def extract_backup_ids(backup_files):
     backup_ids = []
     for file in backup_files:
         backup_id = re.findall(r'\d+', file)
-        if backup_id[0] not in backup_ids:
-            backup_ids.append(backup_id[0])
+        if backup_id[len(backup_id)-1] not in backup_ids:
+            backup_ids.append(backup_id[len(backup_id)-1])
     return backup_ids
 
 if __name__ == '__main__':
