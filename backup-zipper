@@ -20,10 +20,24 @@ def zip(files, dst):
     zf.close()
 
 def process_backups(src):
+    src = os.path.abspath(src)
     filelist = os.listdir(src)
     filelist[:] = [os.path.join(src, file) for file in filelist]
-    return filelist
-    
+    backup_ids = extract_backup_ids(filelist)
+    backup_ids.sort()
+    new_backupfiles = []
+    for file in filelist:
+        if backup_ids[len(backup_ids)] in file:
+            new_backupfiles.append(file)
+    return new_backupfiles
+
+def extract_backup_ids(backup_files):
+    backup_ids = []
+    for file in backup_files:
+        backup_id = re.findall(r'\d+', file)
+        if backup_id[0] not in backup_ids:
+            backup_ids.append(backup_id[0])
+    return backup_ids
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv))
