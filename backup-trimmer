@@ -1,5 +1,16 @@
 #! /usr/bin/env python3
 
+"""
+You pass the full path to the directory containing the backups as an argument to the script
+Execute it as an argument of the python3 interpreter, I tried adding it ot the path but for
+some reason its not working. so just prefix the script with C:\Python33\python.exe
+You can modify the number of backups to keep with the NUM_BACKUPS_TO_KEEP variable
+
+John R Lusby 2013
+
+MIT License
+"""
+
 import sys
 import os
 import re
