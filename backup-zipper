@@ -27,14 +27,16 @@ def process_backups(src):
     filelist[:] = [os.path.join(src, file) for file in filelist]
     return filelist
     
-def upload_arc(archive, destination, username, password):
-    import ftplib
+def upload_arc(archive, target_dir, destination, username, password):
+    from ftplib import FTP
     try:
-        session = ftplib.FTP(destination,username,password)
+        ftp = FTP(destination)
+        ftp.login(user=username, passwd=password)
+        ftp.cwd(target_dir)
         file = open(archive, 'rb')
-        session.storbinary('STOR '+archive, file)
+        ftp.storbinary('STOR '+archive, file)
         file.close()
-        session.quit()
+        ftp.quit()
     except:
         print('whoa wtf happened?', sys.exc_info()[0])
 
