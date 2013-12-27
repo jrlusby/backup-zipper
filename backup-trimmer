@@ -37,7 +37,5 @@ def extract_backup_ids(backup_files):
             backup_ids.append(backup_id[0])
     return backup_ids
 
-
-
 if __name__ == '__main__':
     sys.exit(main(sys.argv))
