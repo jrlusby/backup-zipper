@@ -3,6 +3,7 @@
 import sys
 import os
 import zipfile
+import re
 
 def main(argv):
     destination = "dst.zip"
@@ -23,9 +24,24 @@ def zip(files, dst):
     zf.close()
 
 def process_backups(src):
+    src = os.path.abspath(src)
     filelist = os.listdir(src)
     filelist[:] = [os.path.join(src, file) for file in filelist]
-    return filelist
+    backup_ids = extract_backup_ids(filelist)
+    backup_ids.sort()
+    new_backupfiles = []
+    for file in filelist:
+        if backup_ids[len(backup_ids)-1] in file:
+            new_backupfiles.append(file)
+    return new_backupfiles
+
+def extract_backup_ids(backup_files):
+    backup_ids = []
+    for file in backup_files:
+        backup_id = re.findall(r'\d+', file)
+        if backup_id[len(backup_id)-1] not in backup_ids:
+            backup_ids.append(backup_id[len(backup_id)-1])
+    return backup_ids
     
 def upload_arc(archive, target_dir, destination, username, password):
     from ftplib import FTP
