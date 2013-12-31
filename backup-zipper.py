@@ -27,6 +27,7 @@ def process_backups(src):
     filelist = os.listdir(src)
     filelist[:] = [os.path.join(src, file) for file in filelist]
     ids = extract_backup_ids(filelist)
+    ids.sort()
     to_zips = []
     for file in filelist:
         if ids[len(ids)-1] in file:
