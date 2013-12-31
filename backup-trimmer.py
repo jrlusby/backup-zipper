@@ -5,12 +5,14 @@ import os
 import re
 
 def main(argv):
+    print("whatever")
     backup_files = os.listdir(argv[1])
+    print(backup_files)
     ids = extract_backup_ids(backup_files) #essentially counts the total number of backups
     ids.sort()
-    # print(ids)
-    if len(ids) > 2: #if theres more than 2 backups
-        for item in ids[:len(ids)-2]: #for each backup older than the two newest
+    print(ids)
+    if len(ids) > 1: #if theres more than 2 backups
+        for item in ids[:len(ids)-1]: #for each backup older than the two newest
             for file in backup_files: #for each file 
                 if item in file: #if it belongs to an old backup
                     os.remove(os.path.join(argv[1],file)) #delete the file
