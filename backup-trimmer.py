@@ -18,7 +18,7 @@ import sys
 import os
 import re
 
-NUM_BACKUPS_TO_KEEP = 2
+NUM_BACKUPS_TO_KEEP = 1
 
 def main(argv):
     backup_files = os.listdir(argv[1])
