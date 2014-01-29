@@ -39,7 +39,7 @@ def extract_backup_ids(backup_files):
     backup_ids = []
     for file in backup_files:
         backup_id = re.findall(r'\d+', file)
-        if backup_id[len(backup_id)-1] not in backup_ids:
+        if len(backup_id) > 0 and backup_id[len(backup_id)-1] not in backup_ids:
             backup_ids.append(backup_id[len(backup_id)-1])
     return backup_ids
     
