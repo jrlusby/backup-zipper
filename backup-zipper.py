@@ -64,5 +64,3 @@ def upload_arc(archive, target_dir, destination, username, password):
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv))
-#just want a commit
-
