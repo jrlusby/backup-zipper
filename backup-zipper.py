@@ -7,16 +7,18 @@ import re
 import datetime
 
 today = datetime.date.today()
-id = today.strftime('%m_%d_%Y')
+id = today.strftime('%m_%d_%Y') #default value for whynot
 
 def main(argv):
-    # print("1 "+id)
-    filelist = process_backups(argv[1])
-    # print("3 "+id)
+    # filelist = process_backups(argv[1])
+    filelist = os.listdir(argv[1])
+    filelist[:] = [os.path.join(argv[1], file) for file in filelist]
+    tobackup = process_backups(filelist)
     destination = "backup_"+id+".zip"
-    zip(filelist, destination)
+    zip(tobackup, destination)
     # upload zip to remote
-    # upload_arc(destination, 'BACKUPs/ATMMANAGERPRO', '192.168.26.80', 'support', 'asai1234')
+    upload_arc(destination, 'BACKUPs/ATMMANAGERPRO', '192.168.26.80', 'support', 'asai1234')
+    # print(n_newest(filelist))
     os.remove(destination)
 
 def zip(files, dst):
@@ -27,15 +29,29 @@ def zip(files, dst):
         zf.write(absname, arcname)
     zf.close()
 
-def process_backups(src):
-    filelist = os.listdir(src)
-    filelist[:] = [os.path.join(src, file) for file in filelist]
+def n_newest(files, n=3):
+    ids = extract_backup_ids(files)
+    ids.sort()
+    newest = []
+    if len(ids) > n:
+        newest = ids[-n:]
+    else:
+        newest = ids
+    newest_files = []
+    for id in newest:
+        for file in files:
+            if id in file:
+                newest_files.append(file)
+    return newest_files
+
+def process_backups(filelist):
+    # filelist = os.listdir(src)
+    # filelist[:] = [os.path.join(src, file) for file in filelist]
     ids = extract_backup_ids(filelist)
     ids.sort()
     to_zips = []
     global id
     id = ids[len(ids)-1]
-    # print("2 "+id)
     for file in filelist:
         if ids[len(ids)-1] in file:
             to_zips.append(file)
@@ -57,6 +73,16 @@ def upload_arc(archive, target_dir, destination, username, password):
         ftp.cwd(target_dir)
         file = open(archive, 'rb')
         ftp.storbinary('STOR '+archive, file)
+        files = ftp.nlst()
+        n = 3
+        tokeeps = n_newest(files, n)
+        if len(tokeeps) == n:
+            for file in files:
+                if file not in tokeeps:
+                    #ftp.delete(file)
+                    print("delete " + file)
+                else
+                    print("keep " + file)
         file.close()
         ftp.quit()
     except:
