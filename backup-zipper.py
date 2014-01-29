@@ -6,13 +6,17 @@ import zipfile
 import re
 import datetime
 
+today = datetime.date.today()
+id = today.strftime('%m_%d_%Y')
+
 def main(argv):
-    today = datetime.date.today()
-    destination = "backup_"+today.strftime('%m_%d_%Y')+".zip"
+    # print("1 "+id)
     filelist = process_backups(argv[1])
+    # print("3 "+id)
+    destination = "backup_"+id+".zip"
     zip(filelist, destination)
     # upload zip to remote
-    upload_arc(destination, 'BACKUPs/ATMMANAGERPRO', '192.168.26.80', 'support', 'asai1234')
+    # upload_arc(destination, 'BACKUPs/ATMMANAGERPRO', '192.168.26.80', 'support', 'asai1234')
     os.remove(destination)
 
 def zip(files, dst):
@@ -29,6 +33,9 @@ def process_backups(src):
     ids = extract_backup_ids(filelist)
     ids.sort()
     to_zips = []
+    global id
+    id = ids[len(ids)-1]
+    # print("2 "+id)
     for file in filelist:
         if ids[len(ids)-1] in file:
             to_zips.append(file)
@@ -38,7 +45,7 @@ def extract_backup_ids(backup_files):
     backup_ids = []
     for file in backup_files:
         backup_id = re.findall(r'\d+', file)
-        if backup_id[-1] not in backup_ids:
+        if len(backup_id) > 0 and backup_id[-1] not in backup_ids:
             backup_ids.append(backup_id[-1])
     return backup_ids
     

@@ -18,23 +18,15 @@ import sys
 import os
 import re
 
-NUM_BACKUPS_TO_KEEP = 2
+NUM_BACKUPS_TO_KEEP = 1
 
 def main(argv):
-    print("whatever")
     backup_files = os.listdir(argv[1])
-    print(backup_files)
     ids = extract_backup_ids(backup_files) #essentially counts the total number of backups
     ids.sort()
-<<<<<<< HEAD:backup-trimmer.py
-    print(ids)
-    if len(ids) > 1: #if theres more than 2 backups
-        for item in ids[:len(ids)-1]: #for each backup older than the two newest
-=======
     # print(ids)
     if len(ids) > NUM_BACKUPS_TO_KEEP: #if theres more than 2 backups
         for item in ids[:len(ids)-NUM_BACKUPS_TO_KEEP]: #for each backup older than the two newest
->>>>>>> 4cfd7d63d0af5e4913f159fca45daa3e99a7074a:backup-trimmer
             for file in backup_files: #for each file 
                 if item in file: #if it belongs to an old backup
                     os.remove(os.path.join(argv[1],file)) #delete the file
