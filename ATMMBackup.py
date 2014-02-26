@@ -13,12 +13,16 @@ John R Lusby 2013
 
 MIT License
 """
+import sys
+import os
 def main(argv):
     #trim backups in the atm manager pro backup directory
     #trim backups in the zipped backup directory
     #compress the latest backup into the compressed backup directory
     #trim backups in the ftp server
     #move recent backup to ftp server
+    test_files = ['A/a.txt', 'A/b.txt']
+    bzip_backups(test_files, 'test.tar.bz2')
 
 def trim_backups(dir, tokeep):
     backup_files = os.listdir(dir)
@@ -41,12 +45,21 @@ def extract_backup_ids(backup_files):
     return backup_ids
 
 def zip_backups(files, dst):
+    import zipfile
     zf = zipfile.ZipFile(dst, "w", allowZip64=True)
     for absname in files:
         basename = os.path.basename(absname)
         arcname = os.path.join(dst, basename)
         zf.write(absname, arcname)
     zf.close()
+
+def bzip_backups(files, dst):
+    import tarfile
+    with tarfile.open(dst, "w:bz2") as tar:
+        for absname in files:
+            basename = os.path.basename(absname)
+            arcname = os.path.join(dst, basename)
+            tar.add(absname, arcname)
 
 def n_newest(files, n=3):
     ids = extract_backup_ids(files)
@@ -92,7 +105,7 @@ def upload_arc(archive, target_dir, destination, username, password):
                 if file not in tokeeps:
                     #ftp.delete(file)
                     print("delete " + file)
-                else
+                else:
                     print("keep " + file)
         file.close()
         ftp.quit()
