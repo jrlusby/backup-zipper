@@ -15,10 +15,10 @@ def main(argv):
     local_tokeep = 2
     ftp_tokeep = 4
     #ftp settings
-    destination
-    username
-    password
-    target_dir
+    destination = '192.168.26.80'
+    username =
+    password =
+    target_dir = 'BACKUPs/ATMMANAGERPRO'
 
     backup_files = os.listdir(backup_dir)
     #compress the latest backup into the compressed backup directory
@@ -33,6 +33,7 @@ def main(argv):
 
     #trim backups in the atm manager pro backup directory
     for file in backup_files: #could also check if the file is in one of the archives,but its a lot more work
+        print("removed " + file)
         os.remove(os.path.join(backup_dir, file))
 
     #trim backups in the zipped backup directory
@@ -54,20 +55,21 @@ def main(argv):
         ftp.login(user=username, passwd=password)
         ftpcwd(target_dir)
         #move most recent backup to ftp server
-        file = open(archive, 'rb')
-        ftp.storbinary('STOR '+archive, file)
+        archive = max(ids) + '.tar.bz2'
+        archive = os.path.join(archive_dir, archive)
+        with open(archive, 'rb') as file:
+            ftp.storbinary('STOR '+archive, file)
         #trim backups in the ftp server
         files = ftp.nlst()
-        n = 3
-        tokeeps = n_newest(files, n)
-        if len(tokeeps) == n:
+        ids = extract_backup_ids(files)
+        todelete = ids[0:-ftp_tokeep]
+        for id in todelete:
             for file in files:
-                if file not in tokeeps:
-                    #ftp.delete(file)
+                if id in file:
+                    ftp.delete(file)
                     print("delete " + file)
                 else:
                     print("keep " + file)
-        file.close()
         ftp.quit()
     except:
         print('whoa wtf happened?', sys.exc_info()[0])
