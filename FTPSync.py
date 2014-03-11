@@ -17,6 +17,10 @@ username =
 password =
 target_dir = 'BACKUPs/spiceworks'
 
+# FOR THE RECORD - an error in the implementation of our ftp server FORCED me
+# to use the LIST command with a callback function which I used with a global
+# variable to create the remote file list as opposed to the NORMAL way of doing
+# things which would be to just say remote_files = ftp.nlst(). not my idea!
 remote_files = []
 
 def main(argv):
