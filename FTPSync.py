@@ -49,6 +49,8 @@ def ftp_sync(local_dir, target_dir, destination, username, password):
         for file in remote_only:
             print(file)
             ftp.delete(file)
+    except:
+        print('wtf')
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv))
