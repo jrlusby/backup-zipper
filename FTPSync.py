@@ -17,6 +17,8 @@ username =
 password =
 target_dir = 'BACKUPs/spiceworks'
 
+remote_files = []
+
 def main(argv):
     ftp_sync(local_dir, target_dir, destination, username, password)
 
@@ -31,10 +33,7 @@ def ftp_sync(local_dir, target_dir, destination, username, password):
         #index the files in remote and local directories
         local_files = os.listdir(local_dir)
         print("local files: ", local_files)
-        if ftp.dir():
-            remote_files = ftp.nlst()
-        else:
-            remote_files = []
+        ftp.retrlines('LIST', callback=populate_remote)
         print("remote files: ", remote_files)
         #create file diffs
         local_only = list(set(local_files) - set(remote_files))
@@ -54,6 +53,10 @@ def ftp_sync(local_dir, target_dir, destination, username, password):
             ftp.delete(file)
     except:
         print('wtf')
+
+def populate_remote(line):
+    filename = line.split('0')[-1]
+    remote_files.append(filename)
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv))
