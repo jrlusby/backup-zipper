@@ -29,17 +29,25 @@ def ftp_sync(local_dir, target_dir, destination, username, password):
         #select target directory
         ftp.cwd(target_dir)
         #index the files in remote and local directories
-        remote_files = ftp.nlst()
         local_files = os.listdir(local_dir)
+        print("local files: " + local_files)
+        remote_files = ftp.nlst()
+        print("remote files: " + remote_files)
         #create file diffs
         local_only = list(set(local_files) - set(remote_files))
+        print("local only files: " + local_only)
         remote_only = list(set(remote_files) - set(local_files))
+        print("remote only files: " + remote_only)
         #copy local only files to remote
+        print("storing")
         for file in local_only:
+            print(file)
             with open(os.path.join(local_dir, file), 'rb') as binary_file:
                 ftp.storbinary('STOR ' + file, binary_file)
         #delete remote only files from remote
+        print("deleting")
         for file in remote_only:
+            print(file)
             ftp.delete(file)
 
 if __name__ == '__main__':
