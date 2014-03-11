@@ -16,9 +16,9 @@ archive_dir = "C:\Program Files\Microsoft SQL Server\MSSQL.1\MSSQL\Archives"
 local_tokeep = 5
 ftp_tokeep = 5
 #ftp settings
-destination = '192.168.26.80'
-username = 'support'
-password = 'asai1234'
+destination =
+username =
+password =
 target_dir = 'BACKUPs/ATMMANAGERPRO'
 
 def main(argv):

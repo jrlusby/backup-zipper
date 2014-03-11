@@ -12,9 +12,9 @@ import sys, os, re
 local_dir = "C:\Program Files\Microsoft SQL Server\MSSQL.1\MSSQL\Backup"
 max_backups = 14
 #ftp settings
-destination = '192.168.26.80'
-username = 'support'
-password = 'asai1234'
+destination =
+username =
+password =
 target_dir = 'BACKUPs/spiceworks'
 
 def main(argv):
