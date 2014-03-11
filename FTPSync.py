@@ -24,6 +24,10 @@ target_dir = 'BACKUPs/spiceworks'
 remote_files = []
 
 def main(argv):
+    local_files = os.listdir(local_dir)
+    local_files.sort()
+    for file in local_files[0:-max_backups]:
+        os.remove(os.path.join(local_dir, file))
     ftp_sync(local_dir, target_dir, destination, username, password)
 
 def ftp_sync(local_dir, target_dir, destination, username, password):
