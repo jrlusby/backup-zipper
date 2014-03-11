@@ -30,14 +30,14 @@ def ftp_sync(local_dir, target_dir, destination, username, password):
         ftp.cwd(target_dir)
         #index the files in remote and local directories
         local_files = os.listdir(local_dir)
-        print("local files: " + local_files)
+        print("local files: ", local_files)
         remote_files = ftp.nlst()
-        print("remote files: " + remote_files)
+        print("remote files: ", remote_files)
         #create file diffs
         local_only = list(set(local_files) - set(remote_files))
-        print("local only files: " + local_only)
+        print("local only files: ", local_only)
         remote_only = list(set(remote_files) - set(local_files))
-        print("remote only files: " + remote_only)
+        print("remote only files: ", remote_only)
         #copy local only files to remote
         print("storing")
         for file in local_only:
