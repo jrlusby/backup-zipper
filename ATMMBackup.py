@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 
 """
-John R Lusby 2013
+John R Lusby 2014
 
 MIT License in file LICENSE
 """
