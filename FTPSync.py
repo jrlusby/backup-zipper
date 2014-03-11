@@ -52,7 +52,7 @@ def ftp_sync(local_dir, target_dir, destination, username, password):
         ftp.delete(file)
 
 def populate_remote(line):
-    filename = line.split('0')[-1]
+    filename = line.split(' ')[-1]
     remote_files.append(filename)
 
 if __name__ == '__main__':
